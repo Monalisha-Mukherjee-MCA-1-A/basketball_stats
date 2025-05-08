@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basketball Statistics Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Auth View -->
+    <div id="auth-view" class="auth-view">
+      <div class="auth-container-main">
+        <div class="auth-header">
+          <h1><i class="fas fa-basketball-ball"></i> Basketball Statistics</h1>
+          <p>Please login or register to access the dashboard</p>
+        </div>
+
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-tab="login">Login</button>
+          <button class="auth-tab" data-tab="register">Register</button>
+        </div>
+
+        <div id="login-tab" class="auth-tab-content active">
+          <form id="login-form-main" class="auth-form">
+            <div class="form-group">
+              <label for="login-username-main">Username:</label>
+              <input type="text" id="login-username-main" required>
+            </div>
+            <div class="form-group">
+              <label for="login-password-main">Password:</label>
+              <input type="password" id="login-password-main" required>
+            </div>
+            <div class="form-actions">
+              <button type="button" id="login-button-main" class="btn btn-primary">Login</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="register-tab" class="auth-tab-content">
+          <form id="register-form-main" class="auth-form">
+            <div class="form-group">
+              <label for="register-username-main">Username:</label>
+              <input type="text" id="register-username-main" required>
+            </div>
+            <div class="form-group">
+              <label for="register-email-main">Email:</label>
+              <input type="email" id="register-email-main" required>
+            </div>
+            <div class="form-group">
+              <label for="register-password-main">Password:</label>
+              <input type="password" id="register-password-main" required>
+            </div>
+            <div class="form-group">
+              <label for="register-confirm-password-main">Confirm Password:</label>
+              <input type="password" id="register-confirm-password-main" required>
+            </div>
+            <div class="form-actions">
+              <button type="button" id="register-button-main" class="btn btn-primary">Register</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="dashboard-view" style="display: none;">
+      <div class="container">
+        <header>
+          <h1>
+            <i class="fas fa-basketball-ball"></i> Basketball Statistics Dashboard
+          </h1>
+          <div class="auth-container">
+            <div id="auth-status">
+              <span id="user-info">Not logged in</span>
+              <button id="auth-button" class="btn">Logout</button>
+            </div>
+          </div>
+        </header>
+
+        <nav>
+          <ul>
+            <li>
+              <a href="#" class="nav-link active" data-section="teams">Teams</a>
+            </li>
+            <li>
+              <a href="#" class="nav-link" data-section="players">Players</a>
+            </li>
+            <li>
+              <a href="#" class="nav-link" data-section="matches">Matches</a>
+            </li>
+            <li>
+              <a href="#" class="nav-link" data-section="player-stats"
+                >Player Stats</a
+              >
+            </li>
+            <li>
+              <a href="#" class="nav-link" data-section="team-stats"
+                >Team Stats</a
+              >
+            </li>
+            <li>
+              <a href="#" class="nav-link" data-section="predictions"
+                >Predictions</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="nav-link"
+                data-section="admin"
+                id="admin-link"
+                >Admin</a
+              >
+            </li>
+          </ul>
+        </nav>
+
+      <main>
+        <!-- Teams Section -->
+        <section id="teams" class="content-section active">
+          <h2>Teams</h2>
+          <div class="search-container">
+            <input
+              type="text"
+              id="team-search"
+              class="search-input"
+              placeholder="Search teams..."
+            />
+            <button id="search-teams" class="btn">Search</button>
+          </div>
+          <div class="filter-container">
+            <div class="filter">
+              <label for="team-conference">Conference:</label>
+              <select id="team-conference">
+                <option value="">All</option>
+                <option value="Eastern">Eastern</option>
+                <option value="Western">Western</option>
+              </select>
+            </div>
+            <div class="filter">
+              <label for="team-division">Division:</label>
+              <select id="team-division">
+                <option value="">All</option>
+                <option value="Atlantic">Atlantic</option>
+                <option value="Central">Central</option>
+                <option value="Southeast">Southeast</option>
+                <option value="Northwest">Northwest</option>
+                <option value="Pacific">Pacific</option>
+                <option value="Southwest">Southwest</option>
+              </select>
+            </div>
+            <button id="filter-teams" class="btn">Filter</button>
+          </div>
+          <div class="data-container">
+            <table id="teams-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>City</th>
+                  <th>Abbreviation</th>
+                  <th>Conference</th>
+                  <th>Division</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Team data will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="teams-pagination">
+            <!-- Pagination controls will be added here -->
+          </div>
+        </section>
+
+        <!-- Players Section -->
+        <section id="players" class="content-section">
+          <h2>Players</h2>
+          <div class="search-container">
+            <input
+              type="text"
+              id="player-search"
+              class="search-input"
+              placeholder="Search players..."
+            />
+            <button id="search-players" class="btn">Search</button>
+          </div>
+          <div class="filter-container">
+            <div class="filter">
+              <label for="player-team">Team:</label>
+              <select id="player-team">
+                <option value="">All</option>
+                <!-- Teams will be loaded here -->
+              </select>
+            </div>
+            <div class="filter">
+              <label for="player-position">Position:</label>
+              <select id="player-position">
+                <option value="">All</option>
+                <option value="PG">Point Guard</option>
+                <option value="SG">Shooting Guard</option>
+                <option value="SF">Small Forward</option>
+                <option value="PF">Power Forward</option>
+                <option value="C">Center</option>
+              </select>
+            </div>
+            <button id="filter-players" class="btn">Filter</button>
+          </div>
+          <div class="data-container">
+            <table id="players-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Team</th>
+                  <th>Position</th>
+                  <th>Jersey #</th>
+                  <th>Height</th>
+                  <th>Weight</th>
+                  <th>Age</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Player data will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="players-pagination">
+            <!-- Pagination controls will be added here -->
+          </div>
+        </section>
+
+        <!-- Matches Section -->
+        <section id="matches" class="content-section">
+          <h2>Matches</h2>
+          <div class="search-container">
+            <input
+              type="text"
+              id="match-search"
+              class="search-input"
+              placeholder="Search matches..."
+            />
+            <button id="search-matches" class="btn">Search</button>
+          </div>
+          <div class="filter-container">
+            <div class="filter">
+              <label for="match-season">Season:</label>
+              <select id="match-season">
+                <option value="">All</option>
+                <option value="2023-24">2023-24</option>
+              </select>
+            </div>
+            <div class="filter">
+              <label for="match-team">Team:</label>
+              <select id="match-team">
+                <option value="">All</option>
+                <!-- Teams will be loaded here -->
+              </select>
+            </div>
+            <div class="filter">
+              <label for="match-completed">Status:</label>
+              <select id="match-completed">
+                <option value="">All</option>
+                <option value="true">Completed</option>
+                <option value="false">Upcoming</option>
+              </select>
+            </div>
+            <button id="filter-matches" class="btn">Filter</button>
+          </div>
+          <div class="data-container">
+            <table id="matches-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Home Team</th>
+                  <th>Away Team</th>
+                  <th>Score</th>
+                  <th>Season</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Match data will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="matches-pagination">
+            <!-- Pagination controls will be added here -->
+          </div>
+        </section>
+
+        <!-- Player Stats Section -->
+        <section id="player-stats" class="content-section">
+          <h2>Player Statistics</h2>
+          <div class="filter-container">
+            <div class="filter">
+              <label for="stats-player">Player:</label>
+              <select id="stats-player">
+                <option value="">All</option>
+                <!-- Players will be loaded here -->
+              </select>
+            </div>
+            <div class="filter">
+              <label for="stats-match">Match:</label>
+              <select id="stats-match">
+                <option value="">All</option>
+                <!-- Matches will be loaded here -->
+              </select>
+            </div>
+            <button id="filter-player-stats" class="btn">Filter</button>
+          </div>
+          <div class="data-container">
+            <table id="player-stats-table">
+              <thead>
+                <tr>
+                  <th>Player</th>
+                  <th>Match</th>
+                  <th>Points</th>
+                  <th>Rebounds</th>
+                  <th>Assists</th>
+                  <th>Steals</th>
+                  <th>Blocks</th>
+                  <th>FG%</th>
+                  <th>3P%</th>
+                  <th>FT%</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Player stats data will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="player-stats-pagination">
+            <!-- Pagination controls will be added here -->
+          </div>
+        </section>
+
+        <!-- Team Stats Section -->
+        <section id="team-stats" class="content-section">
+          <h2>Team Statistics</h2>
+          <div class="filter-container">
+            <div class="filter">
+              <label for="team-stats-team">Team:</label>
+              <select id="team-stats-team">
+                <option value="">All</option>
+                <!-- Teams will be loaded here -->
+              </select>
+            </div>
+            <div class="filter">
+              <label for="team-stats-match">Match:</label>
+              <select id="team-stats-match">
+                <option value="">All</option>
+                <!-- Matches will be loaded here -->
+              </select>
+            </div>
+            <button id="filter-team-stats" class="btn">Filter</button>
+          </div>
+          <div class="data-container">
+            <table id="team-stats-table">
+              <thead>
+                <tr>
+                  <th>Team</th>
+                  <th>Match</th>
+                  <th>Points</th>
+                  <th>Rebounds</th>
+                  <th>Assists</th>
+                  <th>Steals</th>
+                  <th>Blocks</th>
+                  <th>FG%</th>
+                  <th>3P%</th>
+                  <th>FT%</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Team stats data will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="team-stats-pagination">
+            <!-- Pagination controls will be added here -->
+          </div>
+        </section>
+
+        <!-- Predictions Section -->
+        <section id="predictions" class="content-section">
+          <h2>Predictions</h2>
+          <div class="prediction-cards">
+            <div class="prediction-card">
+              <h3>Player Performance Prediction</h3>
+              <div class="prediction-form">
+                <div class="form-group">
+                  <label for="player-prediction-player">Player:</label>
+                  <select id="player-prediction-player">
+                    <option value="">Select Player</option>
+                    <!-- Players will be loaded here -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="player-prediction-match">Match:</label>
+                  <select id="player-prediction-match">
+                    <option value="">Select Match</option>
+                    <!-- Matches will be loaded here -->
+                  </select>
+                </div>
+                <button id="predict-player" class="btn">Predict</button>
+              </div>
+              <div id="player-prediction-result" class="prediction-result">
+                <!-- Prediction results will be displayed here -->
+              </div>
+            </div>
+
+            <div class="prediction-card">
+              <h3>Match Outcome Prediction</h3>
+              <div class="prediction-form">
+                <div class="form-group">
+                  <label for="match-prediction-match">Match:</label>
+                  <select id="match-prediction-match">
+                    <option value="">Select Match</option>
+                    <!-- Matches will be loaded here -->
+                  </select>
+                </div>
+                <button id="predict-match" class="btn">Predict</button>
+              </div>
+              <div id="match-prediction-result" class="prediction-result">
+                <!-- Prediction results will be displayed here -->
+              </div>
+            </div>
+
+            <div class="prediction-card">
+              <h3>Player Comparison</h3>
+              <div class="prediction-form">
+                <div class="form-group">
+                  <label for="player-comparison-player1">Player 1:</label>
+                  <select id="player-comparison-player1">
+                    <option value="">Select Player</option>
+                    <!-- Players will be loaded here -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="player-comparison-player2">Player 2:</label>
+                  <select id="player-comparison-player2">
+                    <option value="">Select Player</option>
+                    <!-- Players will be loaded here -->
+                  </select>
+                </div>
+                <button id="compare-players" class="btn">Compare</button>
+              </div>
+              <div id="player-comparison-result" class="prediction-result">
+                <!-- Comparison results will be displayed here -->
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Modal for details -->
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2 id="modal-title">Details</h2>
+          <div id="modal-body">
+            <!-- Modal content will be loaded here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Auth Modal -->
+      <div id="auth-modal" class="modal">
+        <div class="modal-content">
+          <span class="close auth-close">&times;</span>
+          <h2 id="auth-modal-title">Login</h2>
+          <div id="auth-modal-body">
+            <div id="login-form" class="auth-form">
+              <div class="form-group">
+                <label for="login-username">Username:</label>
+                <input type="text" id="login-username" required />
+              </div>
+              <div class="form-group">
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" required />
+              </div>
+              <div class="form-actions">
+                <button id="login-button" class="btn">Login</button>
+                <a href="#" id="show-register"
+                  >Don't have an account? Register</a
+                >
+              </div>
+            </div>
+            <div id="register-form" class="auth-form" style="display: none">
+              <div class="form-group">
+                <label for="register-username">Username:</label>
+                <input type="text" id="register-username" required />
+              </div>
+              <div class="form-group">
+                <label for="register-email">Email:</label>
+                <input type="email" id="register-email" required />
+              </div>
+              <div class="form-group">
+                <label for="register-password">Password:</label>
+                <input type="password" id="register-password" required />
+              </div>
+              <div class="form-group">
+                <label for="register-confirm-password">Confirm Password:</label>
+                <input
+                  type="password"
+                  id="register-confirm-password"
+                  required
+                />
+              </div>
+              <div class="form-actions">
+                <button id="register-button" class="btn">Register</button>
+                <a href="#" id="show-login">Already have an account? Login</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Modal -->
+      <div id="form-modal" class="modal">
+        <div class="modal-content">
+          <span class="close form-close">&times;</span>
+          <h2 id="form-modal-title">Add New</h2>
+          <div id="form-modal-body">
+            <!-- Form content will be loaded here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Section -->
+      <section id="admin" class="content-section">
+        <h2>Admin Dashboard</h2>
+        <div class="admin-cards">
+          <div class="admin-card">
+            <h3>Teams</h3>
+            <p>Manage basketball teams</p>
+            <button class="btn add-btn" data-type="team">Add New Team</button>
+          </div>
+          <div class="admin-card">
+            <h3>Players</h3>
+            <p>Manage basketball players</p>
+            <button class="btn add-btn" data-type="player">
+              Add New Player
+            </button>
+          </div>
+          <div class="admin-card">
+            <h3>Matches</h3>
+            <p>Manage basketball matches</p>
+            <button class="btn add-btn" data-type="match">Add New Match</button>
+          </div>
+          <div class="admin-card">
+            <h3>Player Statistics</h3>
+            <p>Manage player statistics</p>
+            <button class="btn add-btn" data-type="player-stat">
+              Add Player Stats
+            </button>
+          </div>
+          <div class="admin-card">
+            <h3>Team Statistics</h3>
+            <p>Manage team statistics</p>
+            <button class="btn add-btn" data-type="team-stat">
+              Add Team Stats
+            </button>
+          </div>
+          <div class="admin-card">
+            <h3>Data Export</h3>
+            <p>Export data to CSV</p>
+            <div class="export-buttons">
+              <button class="btn export-btn" data-type="teams">
+                Export Teams
+              </button>
+              <button class="btn export-btn" data-type="players">
+                Export Players
+              </button>
+              <button class="btn export-btn" data-type="matches">
+                Export Matches
+              </button>
+              <button class="btn export-btn" data-type="player-stats">
+                Export Player Stats
+              </button>
+              <button class="btn export-btn" data-type="team-stats">
+                Export Team Stats
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 Basketball Statistics Dashboard</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
